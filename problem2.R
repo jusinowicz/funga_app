@@ -83,6 +83,9 @@ tree_sites_ml = tree_sites[, !colnames(tree_sites) %in%
 
 #Scale
 tree_sites_ml = as.data.frame(scale(tree_sites_ml))
+#For plotting later: 
+bmn1 = mean(tree_sites$PLT_CN) 
+bsd1 = sqrt(var(tree_sites$PLT_CN))
 
 #One-hot encoding for PLOTS: 
 #Get the variable's unique integer alphabet: 

@@ -44,73 +44,73 @@ set.seed(123)
 #This section is exploratory and can be commented out of final code.
 #=============================================================================
 
-# head(trees)
-# head(sites)
+head(trees)
+head(sites)
 
-# #Match the case in col names
-# sites = rename(sites, LAT=lat, LON=lon) 
+#Match the case in col names
+sites = rename(sites, LAT=lat, LON=lon) 
 
-# #Look for any NAs or strange non-finite values: 
-# in_trees = sum(is.na(trees))
-# if_trees = sum(apply(trees,2,is.infinite)) 
+#Look for any NAs or strange non-finite values: 
+in_trees = sum(is.na(trees))
+if_trees = sum(apply(trees,2,is.infinite)) 
 
-# #How are sets organized? By site?
-# #Add a new column "PLOT" to the tree level data
-# site_ids = unique(trees[c("LAT", "LON")])
-# site_ids$SITE = paste0("site", seq_len(nrow(site_ids)))
+#How are sets organized? By site?
+#Add a new column "PLOT" to the tree level data
+site_ids = unique(trees[c("LAT", "LON")])
+site_ids$SITE = paste0("site", seq_len(nrow(site_ids)))
 
-# #Number of unique lat/lon combos is <200. So some lat/lon must have 
-# #multiple plots within them. Look at a table quick: 
-# data.frame(table(sites$LON)) 
-# #Looks like some lat/lon have 2 occurrences. That means plots are nested
-# #within sites. Need a way to identify plots within a site. 
-# #PLT_CN is the only option. Will this work? Assumes that 2 plots within a
-# #site have unique measures of CN:
+#Number of unique lat/lon combos is <200. So some lat/lon must have 
+#multiple plots within them. Look at a table quick: 
+data.frame(table(sites$LON)) 
+#Looks like some lat/lon have 2 occurrences. That means plots are nested
+#within sites. Need a way to identify plots within a site. 
+#PLT_CN is the only option. Will this work? Assumes that 2 plots within a
+#site have unique measures of CN:
 
-# plot_ids = unique(trees[c("LAT", "LON", "PLT_CN")])
-# pl1 = arrange(plot_ids, LAT,LON,PLT_CN)
+plot_ids = unique(trees[c("LAT", "LON", "PLT_CN")])
+pl1 = arrange(plot_ids, LAT,LON,PLT_CN)
 
-# #Check these against sites for uniqueness: 
-# plot_ids2 = unique(sites[c("LAT", "LON", "PLT_CN")])
-# pl2 = arrange(plot_ids2, LAT,LON,PLT_CN)
-# identical(pl1,pl2)
+#Check these against sites for uniqueness: 
+plot_ids2 = unique(sites[c("LAT", "LON", "PLT_CN")])
+pl2 = arrange(plot_ids2, LAT,LON,PLT_CN)
+identical(pl1,pl2)
 
-# #Returns TRUE, so this is ok! 
+#Returns TRUE, so this is ok! 
 
-# #Quickly plot biomass (i.e. PLT_CN) vs diameter and biomass vs. height, 
-# #since we'll be looking for the way that dia and ht predict biomass given
-# #site features. 
+#Quickly plot biomass (i.e. PLT_CN) vs diameter and biomass vs. height, 
+#since we'll be looking for the way that dia and ht predict biomass given
+#site features. 
 
-# # Scatter plot of DIA vs. PLT_CN
-# p1 = ggplot(trees)+ 
-#   geom_point(aes(x = DIA, y = PLT_CN)) +
-#   labs(x = "DIA", y = "Biomass") # +
-#   #theme_bw() +
+# Scatter plot of DIA vs. PLT_CN
+p1 = ggplot(trees)+ 
+  geom_point(aes(x = DIA, y = PLT_CN)) +
+  labs(x = "DIA", y = "Biomass") # +
+  #theme_bw() +
 
-# # Scatter plot of HT vs. PLT_CN
-# p2 = ggplot(trees)+ 
-#   geom_point(aes(x = HT, y = PLT_CN)) +
-#   labs(x = "HT", y = "Biomass")# +
-#   #theme_bw() 
+# Scatter plot of HT vs. PLT_CN
+p2 = ggplot(trees)+ 
+  geom_point(aes(x = HT, y = PLT_CN)) +
+  labs(x = "HT", y = "Biomass")# +
+  #theme_bw() 
 
-# # Scatter plot of STDAGE vs. PLT_CN
-# p3 = ggplot(trees)+ 
-#   geom_point(aes(x = STDAGE , y = PLT_CN)) +
-#   labs(x = "HT", y = "Biomass")# +
-#   #theme_bw() 
+# Scatter plot of STDAGE vs. PLT_CN
+p3 = ggplot(trees)+ 
+  geom_point(aes(x = STDAGE , y = PLT_CN)) +
+  labs(x = "HT", y = "Biomass")# +
+  #theme_bw() 
  
-# ggarrange(p1,p2,p3)
+ggarrange(p1,p2,p3)
 
-# #What is the spatial scale of these plots like? Look quickly at spatial 
-# #autocorrelation in biomass using variograms to see if this will be a factor.
-# library(sp)
-# library(gstat)
+#What is the spatial scale of these plots like? Look quickly at spatial 
+#autocorrelation in biomass using variograms to see if this will be a factor.
+library(sp)
+library(gstat)
 
-# trees_sp = trees
-# coordinates(trees_sp) = ~LAT+LON
-# v1 = variogram(PLT_CN~1, trees_sp, alpha=c(0,45,90,135))                                                      
-# plot(v1)    
-# #Doesn't look like we're at a spatial scale where this matters. 
+trees_sp = trees
+coordinates(trees_sp) = ~LAT+LON
+v1 = variogram(PLT_CN~1, trees_sp, alpha=c(0,45,90,135))                                                      
+plot(v1)    
+#Doesn't look like we're at a spatial scale where this matters. 
 
 #=============================================================================
 #Clean and merge data sets so trees have all of the site-level data
