@@ -222,10 +222,7 @@ new_data_ml_CN$HT = new_data_ml_HT$pred
 new_data_ml_CN$DIA = new_data_ml_DIA$pred
 new_data_ml_CN$pred = predict(biomass_rf_ml_CN, newdata = new_data_ml_CN)
 
-#=============================================================================
-#Plots
-#=============================================================================
-###Figure 1: Model predictions vs. original CN
+###Key results:
 #How much biomass is gained or lost? 
 bm_loss= (new_data_ml_CN$pred*bsd1 + bmn1)- (new_data_ml_CN$PLT_CN*bsd1 + bmn1)
 #Add this to the data frame
@@ -236,6 +233,11 @@ cn_ordered=new_data_ml_CN[,c(1:22, 222:223)][order(new_data_ml_CN$bm_loss,decrea
 cn_ordered$NUM = tree_sites$NUM[order(new_data_ml_CN$bm_loss,decreasing=T)] 
 #E.g., location recommendations based on the top 200: 
 unique(head(cn_ordered,200)$NUM)
+
+#=============================================================================
+#Plots
+#=============================================================================
+###Figure 1: Model predictions vs. original CN
 
 fig.name = paste("minph_biomass",".pdf",sep="")
 pdf(file=fig.name, height=8, width=8, onefile=TRUE, family='Helvetica', pointsize=16)
@@ -248,7 +250,7 @@ dev.off()
 
 #What variables drive the gain in the top 100? 
 cor_matrix = cor(cn_ordered$bm_loss[1:100], cn_ordered[1:100,1:21])
-heatmap(cor_matrix, symm = TRUE, 
-        main = "Correlation Matrix of Numeric Variables")
+# heatmap(cor_matrix, symm = TRUE, 
+#         main = "Correlation Matrix of Numeric Variables")
 
 

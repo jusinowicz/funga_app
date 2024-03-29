@@ -237,7 +237,7 @@ points(tree_sites$NUM, new_data_ml_CN$pred*bsd1 + bmn1, col="green")
 dev.off()
 
 cor_matrix = cor(new_data_ml_CN$pred, tree_sites[,10:26])
-heatmap(cor_matrix, symm = TRUE, 
-        main = "Correlation Matrix of Numeric Variables")
+# heatmap(cor_matrix, symm = TRUE, 
+#         main = "Correlation Matrix of Numeric Variables")
 
 
