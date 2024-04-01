@@ -318,8 +318,7 @@ p3 = varImpPlot(biomass_rf_nocat,
 #dev.off()
 
 #=============================================================================
-#Fit a RNN (just distributed layers for now? maybe lstm is better, or is it 
-#necessary?). Compare the RMSE with RF model.
+#Fit a RNN (just distributed layers for now?). Compare the RMSE with RF model.
 #The RSME is an order of magnitude larger than the RF. After comparison, it's 
 #clear that this is a less appropriate model structure.
 #Let's not waste more time exploring RNNs at the moment.
